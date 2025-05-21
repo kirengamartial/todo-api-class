@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Coverage directory
+coverage/
+
+# Production build
+dist/
+
+# Dependency directories
+.pnp/
+.pnp.js
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Mac files
+.DS_Store
+
+# Docker volumes
+data/
