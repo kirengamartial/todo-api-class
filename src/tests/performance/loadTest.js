@@ -61,24 +61,28 @@ const simulateUsers = async (numberOfUsers) => {
   console.log(`\nSimulating ${numberOfUsers} concurrent users...`);
   
   const startTime = Date.now();
+  
+  // Create an array of promises to simulate concurrent requests
+  const promises = Array(numberOfUsers).fill().map((_, index) => {
+    return getAllTodos();
+  });
+  
+  // Wait for all requests to complete and collect results
+  const results = await Promise.allSettled(promises);
+  
+  // Process results
   let successCount = 0;
   let failureCount = 0;
   let totalResponseTime = 0;
   
-  // Create an array of promises to simulate concurrent requests
-  const promises = Array(numberOfUsers).fill().map((_, index) => {
-    return getAllTodos().then(result => {
-      if (result.success) {
-        successCount++;
-        totalResponseTime += result.duration;
-      } else {
-        failureCount++;
-      }
-    });
+  results.forEach(result => {
+    if (result.status === 'fulfilled' && result.value.success) {
+      successCount++;
+      totalResponseTime += result.value.duration;
+    } else {
+      failureCount++;
+    }
   });
-  
-  // Wait for all requests to complete
-  await Promise.allSettled(promises);
   
   const endTime = Date.now();
   const totalDuration = endTime - startTime;
